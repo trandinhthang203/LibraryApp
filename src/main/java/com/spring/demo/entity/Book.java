@@ -23,8 +23,8 @@ public class Book {
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<BorrowRecord> borrowRecords;
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<BookCategory> bookCategoríe;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
+	private List<BookCategory> bookCategories;
 	
 	public Book() {
 		
