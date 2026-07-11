@@ -3,16 +3,20 @@ package com.spring.demo.entity;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String roleId;
-	
+	private Long roleId;
+
+	@NotBlank(message = "Tên vai trò không được để trống")
+	@Size(max = 50)
 	private String name;
-	
-	private Integer description;
+
+	@Size(max = 255)
+	private String description;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
 	private List<User> users;
@@ -20,17 +24,17 @@ public class Role {
 	public Role() {
 	}
 
-	public Role(String roleId, String name, Integer description) {
+	public Role(Long roleId, String name, String description) {
 		this.roleId = roleId;
 		this.name = name;
 		this.description = description;
 	}
 
-	public String getRoleId() {
+	public Long getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(String roleId) {
+	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
 
@@ -42,11 +46,11 @@ public class Role {
 		this.name = name;
 	}
 
-	public Integer getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(Integer description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 

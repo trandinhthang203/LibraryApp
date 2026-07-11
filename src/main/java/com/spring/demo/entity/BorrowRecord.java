@@ -1,21 +1,33 @@
 package com.spring.demo.entity;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class BorrowRecord {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String borrowId;
-	
+	private Long borrowId;
+
+	@NotNull(message = "Ngày mượn không được để trống")
+	@PastOrPresent(message = "Ngày mượn không được là ngày trong tương lai")
 	private Date borrowDate;
+
+	@NotNull(message = "Ngày hẹn trả không được để trống")
 	private Date returnDate;
+
 	private Date actualReturnDate;
+
+	@Pattern(regexp = "BORROWED|RETURNED|OVERDUE", message = "Trạng thái không hợp lệ")
 	private String status;
-	private DecimalFormat fineAmount;
+
+	@DecimalMin(value = "0.0", message = "Tiền phạt không được âm")
+	private BigDecimal fineAmount;
+
+	@Size(max = 500)
 	private String text;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -32,8 +44,8 @@ public class BorrowRecord {
 		
 	}
 
-	public BorrowRecord(String borrowId, Date borrowDate, Date returnDate, Date actualReturnDate, String status,
-			DecimalFormat fineAmount, String text, User user, Book book) {
+	public BorrowRecord(Long borrowId, Date borrowDate, Date returnDate, Date actualReturnDate, String status,
+			BigDecimal fineAmount, String text, User user, Book book) {
 		
 		this.borrowId = borrowId;
 		this.borrowDate = borrowDate;
@@ -47,12 +59,12 @@ public class BorrowRecord {
 	}
 
 
-	public String getBorrowId() {
+	public Long getBorrowId() {
 		return borrowId;
 	}
 
 
-	public void setBorrowId(String borrowId) {
+	public void setBorrowId(Long borrowId) {
 		this.borrowId = borrowId;
 	}
 
@@ -97,12 +109,12 @@ public class BorrowRecord {
 	}
 
 
-	public DecimalFormat getFineAmount() {
+	public BigDecimal getFineAmount() {
 		return fineAmount;
 	}
 
 
-	public void setFineAmount(DecimalFormat fineAmount) {
+	public void setFineAmount(BigDecimal fineAmount) {
 		this.fineAmount = fineAmount;
 	}
 

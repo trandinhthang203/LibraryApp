@@ -4,21 +4,33 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String userId;
-	
+	private Long userId;
+
+	@NotBlank(message = "Username không được để trống")
+	@Size(min = 4, max = 50, message = "Username phải từ 4 đến 50 ký tự")
 	private String username;
-	
-	@Email
+
+	@NotBlank(message = "Email không được để trống")
+	@Email(message = "Email không đúng định dạng")
 	private String email;
 
+	@NotBlank(message = "Mật khẩu không được để trống")
+	@Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
 	private String password;
+
+	@NotBlank(message = "Họ tên không được để trống")
+	@Size(max = 100)
 	private String fullname;
+
 	private LocalDateTime createAt;
+
+	@Pattern(regexp = "ACTIVE|INACTIVE|LOCKED", message = "Trạng thái không hợp lệ")
 	private String status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -30,7 +42,7 @@ public class User {
 	}
 
 
-	public User(String userId, String username, @Email String email, String password, String fullname,
+	public User(Long userId, String username, @Email String email, String password, String fullname,
 			LocalDateTime createAt, String status, Role role) {
 		this.userId = userId;
 		this.username = username;
@@ -43,12 +55,12 @@ public class User {
 	}
 
 
-	public String getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
 
-	public void setUserId(String userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

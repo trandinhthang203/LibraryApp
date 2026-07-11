@@ -5,22 +5,37 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String bookId;
-	
+	private Long bookId;
+
+	@NotBlank(message = "Tiêu đề sách không được để trống")
+	@Size(max = 255, message = "Tiêu đề không vượt quá 255 ký tự")
 	private String title;
+
+	@NotBlank(message = "Tác giả không được để trống")
+	@Size(max = 150)
 	private String author;
+
+	@Size(max = 150)
 	private String publisher;
+
+	@Past(message = "Ngày xuất bản phải là ngày trong quá khứ")
 	private Date publicationDate;
+
+	@Size(max = 2000, message = "Tóm tắt không vượt quá 2000 ký tự")
 	private String summary;
+
+	@NotNull(message = "Số lượng tồn kho không được để trống")
+	@Min(value = 0, message = "Số lượng tồn kho không được âm")
 	private Integer stockQuantity;
 	private LocalDateTime createAt;
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
 	private List<BorrowRecord> borrowRecords;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book", cascade = CascadeType.ALL)
@@ -31,7 +46,7 @@ public class Book {
 	}
 
 
-	public Book(String bookId, String title, String author, String publisher, Date publicationDate, String summary,
+	public Book(Long bookId, String title, String author, String publisher, Date publicationDate, String summary,
 			Integer stockQuantity, LocalDateTime createAt) {
 		this.bookId = bookId;
 		this.title = title;
@@ -44,12 +59,12 @@ public class Book {
 	}
 
 
-	public String getBookId() {
+	public Long getBookId() {
 		return bookId;
 	}
 
 
-	public void setBookId(String bookId) {
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
 
