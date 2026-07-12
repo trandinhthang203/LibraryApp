@@ -1,58 +1,31 @@
 package com.spring.demo.entity;
 
-import java.util.List;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import lombok.*;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.spring.demo.enums.RoleName;
 
 @Entity
+@Table(name = "roles")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Role {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long roleId;
 
-	@NotBlank(message = "Tên vai trò không được để trống")
-	@Size(max = 50)
-	private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Size(max = 255)
-	private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true, length = 20)
+    private RoleName name;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
-	private List<User> users;
-	
-	public Role() {
-	}
+    @Column(length = 255)
+    private String description;
 
-	public Role(Long roleId, String name, String description) {
-		this.roleId = roleId;
-		this.name = name;
-		this.description = description;
-	}
-
-	public Long getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
+    @OneToMany(mappedBy = "role")
+    @Builder.Default
+    private Set<User> users = new HashSet<>();
 }

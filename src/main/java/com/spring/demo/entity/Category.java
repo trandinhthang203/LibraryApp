@@ -1,61 +1,28 @@
 package com.spring.demo.entity;
 
-import java.util.List;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import lombok.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "categories")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Category {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long categoryId;
 
-	@NotBlank(message = "Tên danh mục không được để trống")
-	@Size(max = 100, message = "Tên danh mục không vượt quá 100 ký tự")
-	private String categoryName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Size(max = 500)
-	private String description;
-	
-	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<BookCategory> bookCategories;
-	
-	public Category() {
-		super();
-	}
-	
-	public Category(Long categoryId, String categoryName, String description) {
-		super();
-		this.categoryId = categoryId;
-		this.categoryName = categoryName;
-		this.description = description;
-	}
+    @Column(nullable = false, unique = true, length = 100)
+    private String name;
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
+    @Column(length = 500)
+    private String description;
 
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
-
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	
-
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<BookCategory> bookCategories = new HashSet<>();
 }
