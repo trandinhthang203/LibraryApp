@@ -5,6 +5,12 @@
 <body class="container mt-4">
 <h2 th:text="${book.title}">Tiêu đề</h2>
 <p><b>Tác giả:</b> <span th:text="${book.author}"></span></p>
+<p><b>Danh mục:</b>
+	<span th:if="${#lists.isEmpty(book.categories)}">-</span>
+	<span th:each="cat : ${book.categories}" class="me-1">
+		<a th:href="@{/categories/{id}(id=${cat.id})}" class="badge bg-primary text-decoration-none" th:text="${cat.name}"></a>
+	</span>
+</p>
 <p><b>Nhà xuất bản:</b> <span th:text="${book.publisher}"></span></p>
 <p><b>ISBN:</b> <span th:text="${book.isbn}"></span></p>
 <p><b>Tồn kho:</b> <span th:text="${book.stockQuantity}"></span></p>

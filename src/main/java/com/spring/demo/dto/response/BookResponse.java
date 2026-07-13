@@ -3,6 +3,7 @@ package com.spring.demo.dto.response;
 import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
+import com.spring.demo.dto.response.CategorySimple;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
@@ -16,5 +17,5 @@ public class BookResponse {
     private LocalDate publicationDate;
     private String summary;
     private Integer stockQuantity;
-    private List<String> categoryNames;
+    private List<CategorySimple> categories;
 }

@@ -2,6 +2,9 @@ package com.spring.demo.controller;
 
 import com.spring.demo.dto.request.CategoryRequest;
 import com.spring.demo.service.CategoryService;
+import com.spring.demo.service.BookService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +16,23 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryViewController {
 
     private final CategoryService categoryService;
+    private final BookService bookService;
 
     @GetMapping
     public String list(Model model) {
         model.addAttribute("categories", categoryService.getAll());
         return "categories/list";
+    }
+
+    @GetMapping("/{id}")
+    public String booksByCategory(@PathVariable Long id,
+                                  @PageableDefault(size = 8) Pageable pageable,
+                                  Model model) {
+        var category = categoryService.getById(id);
+        model.addAttribute("category", category);
+        model.addAttribute("books", bookService.findByCategoryId(id, pageable));
+        model.addAttribute("keyword", null);
+        return "categories/books";
     }
 
     @GetMapping("/new")

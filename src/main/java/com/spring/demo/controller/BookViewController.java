@@ -26,7 +26,7 @@ public class BookViewController {
 
     @GetMapping
     public String list(@RequestParam(required = false) String keyword,
-                        @PageableDefault(size = 8) Pageable pageable,
+                        @PageableDefault(size = 2) Pageable pageable,
                         Model model) {
         model.addAttribute("books", bookService.search(keyword, pageable));
         model.addAttribute("keyword", keyword);

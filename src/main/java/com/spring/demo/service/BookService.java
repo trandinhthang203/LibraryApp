@@ -12,5 +12,6 @@ public interface BookService {
     void delete(Long id);
     BookResponse getById(Long id);
     Page<BookResponse> search(String keyword, Pageable pageable);
+    Page<BookResponse> findByCategoryId(Long categoryId, Pageable pageable);
     Book getEntityById(Long id);
 }

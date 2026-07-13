@@ -27,6 +27,7 @@
         <tr>
             <th>Tiêu đề</th>
             <th>Tác giả</th>
+            <th>Danh mục</th>
             <th>Tồn kho</th>
             <th style="width: 260px;">Hành động</th>
         </tr>
@@ -35,6 +36,12 @@
     <tr th:each="book : ${books.content}">
         <td th:text="${book.title}"></td>
         <td th:text="${book.author}"></td>
+        <td>
+            <span th:if="${#lists.isEmpty(book.categories)}">-</span>
+            <span th:each="cat : ${book.categories}" class="me-1">
+                <a th:href="@{/categories/{id}(id=${cat.id})}" class="badge bg-primary text-decoration-none" th:text="${cat.name}"></a>
+            </span>
+        </td>
         <td th:text="${book.stockQuantity}"></td>
         <td>
             <a class="btn btn-sm btn-outline-secondary" th:href="@{'/books/' + ${book.id}}">Chi tiết</a>

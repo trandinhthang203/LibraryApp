@@ -17,10 +17,13 @@
 <table class="table table-bordered">
     <thead><tr><th>Tên</th><th>Mô tả</th><th style="width:180px;">Hành động</th></tr></thead>
     <tbody>
-    <tr th:each="cat : ${categories}">
-        <td th:text="${cat.name}"></td>
+        <tr th:each="cat : ${categories}">
+        <td>
+            <a th:href="@{'/categories/' + ${cat.id}}" th:text="${cat.name}" class="text-decoration-none"></a>
+        </td>
         <td th:text="${cat.description}"></td>
         <td>
+            <a class="btn btn-sm btn-primary me-1" th:href="@{'/categories/' + ${cat.id}}">Xem</a>
             <a class="btn btn-sm btn-warning" th:href="@{'/categories/' + ${cat.id} + '/edit'}">Sửa</a>
             <form style="display:inline" method="post" th:action="@{'/categories/' + ${cat.id} + '/delete'}"
                   onsubmit="return confirm('Xóa danh mục này?');">

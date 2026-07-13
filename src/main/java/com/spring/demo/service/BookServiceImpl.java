@@ -2,6 +2,7 @@ package com.spring.demo.service;
 
 import com.spring.demo.dto.request.BookRequest;
 import com.spring.demo.dto.response.BookResponse;
+import com.spring.demo.dto.response.CategorySimple;
 import com.spring.demo.entity.*;
 import com.spring.demo.exception.BusinessException;
 import com.spring.demo.exception.ResourceNotFoundException;
@@ -97,8 +98,10 @@ public class BookServiceImpl implements BookService {
     }
 
     private BookResponse toResponse(Book book) {
-        List<String> categoryNames = bookCategoryRepository.findByBookId(book.getId())
-                .stream().map(bc -> bc.getCategory().getName()).collect(Collectors.toList());
+        List<CategorySimple> categories = bookCategoryRepository.findByBookId(book.getId())
+                .stream()
+                .map(bc -> new CategorySimple(bc.getCategory().getId(), bc.getCategory().getName()))
+                .collect(Collectors.toList());
 
         return BookResponse.builder()
                 .id(book.getId())
@@ -109,7 +112,12 @@ public class BookServiceImpl implements BookService {
                 .publicationDate(book.getPublicationDate())
                 .summary(book.getSummary())
                 .stockQuantity(book.getStockQuantity())
-                .categoryNames(categoryNames)
+                .categories(categories)
                 .build();
+    }
+
+    @Override
+    public Page<BookResponse> findByCategoryId(Long categoryId, Pageable pageable) {
+        return bookRepository.findByCategoryId(categoryId, pageable).map(this::toResponse);
     }
 }
