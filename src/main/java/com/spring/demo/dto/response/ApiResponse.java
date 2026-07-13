@@ -4,13 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class ApiResponse<T> {
     private boolean success;
     private String message;
     private T data;
     
-    private ApiResponse(boolean success, String message, T data) {
+    public ApiResponse(boolean success, String message, T data) {
 		this.success = success;
 		this.message = message;
 		this.data = data;

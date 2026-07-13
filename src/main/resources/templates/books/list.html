@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sách</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh sách sách</h2>
+    <a class="btn btn-success" sec:authorize="hasRole('ADMIN')" th:href="@{/books/new}">+ Thêm sách</a>
+</div>
+
+<!-- Thông báo -->
+<div class="alert alert-success" th:if="${message}" th:text="${message}"></div>
+<div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+<form method="get" th:action="@{/books}" class="mb-3 d-flex">
+    <input type="text" name="keyword" th:value="${keyword}" class="form-control me-2" placeholder="Tìm theo tên/tác giả">
+    <button class="btn btn-primary">Tìm</button>
+</form>
+
+<table class="table table-bordered align-middle">
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Tác giả</th>
+            <th>Tồn kho</th>
+            <th style="width: 260px;">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books.content}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td th:text="${book.stockQuantity}"></td>
+        <td>
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{'/books/' + ${book.id}}">Chi tiết</a>
+
+            <!-- USER: mượn sách -->
+            <form sec:authorize="hasRole('USER')" style="display:inline"
+                  method="post" th:action="@{'/books/' + ${book.id} + '/borrow'}">
+                <button type="submit" class="btn btn-sm btn-primary"
+                        th:disabled="${book.stockQuantity <= 0}">Mượn</button>
+            </form>
+
+            <!-- ADMIN: sửa / xóa -->
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-sm btn-warning"
+               th:href="@{'/books/' + ${book.id} + '/edit'}">Sửa</a>
+            <form sec:authorize="hasRole('ADMIN')" style="display:inline"
+                  method="post" th:action="@{'/books/' + ${book.id} + '/delete'}"
+                  onsubmit="return confirm('Xóa sách này?');">
+                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${books.totalPages > 1}">
+    <span th:each="i : ${#numbers.sequence(0, books.totalPages - 1)}" class="me-1">
+        <a th:href="@{/books(page=${i}, keyword=${keyword})}" th:text="${i + 1}"></a>
+    </span>
+</div>
+
+<a class="btn btn-secondary mt-3" th:href="@{/home}">Quay lại trang chủ</a>
+</body>
+</html>

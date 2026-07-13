@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.demo.enums.RoleName;
 
 @Entity
@@ -27,5 +28,6 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     @Builder.Default
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 }
