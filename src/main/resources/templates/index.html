@@ -24,7 +24,7 @@
                  <span sec:authorize="hasRole('USER')">Người dùng</span>)
             </span>
             <a class="btn btn-outline-light btn-sm" th:href="@{/books}">Danh sách sách</a>
-            <a class="btn btn-outline-light btn-sm" sec:authorize="hasRole('ADMIN')" th:href="@{/categories}">Danh mục</a>
+            <a class="btn btn-outline-light btn-sm" th:href="@{/categories}">Danh mục</a>
             <a class="btn btn-danger btn-sm" th:href="@{/logout}">Đăng xuất</a>
         </span>
     </div>

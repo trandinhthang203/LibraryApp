@@ -43,13 +43,14 @@ public class SecurityConfig {
             	    .requestMatchers("/", "/home", "/login", "/register", "/css/**", "/js/**").permitAll()
             	    .requestMatchers("/api/auth/**").permitAll()
 
-            	    // Web: xem sách công khai (GET), nhưng thêm/sửa/xóa/new/edit/delete chỉ ADMIN
-            	    .requestMatchers(HttpMethod.GET, "/books", "/books/{id}").permitAll()
-            	    .requestMatchers("/books/new", "/books/*/edit", "/books/*/delete").hasRole("ADMIN")
-            	    .requestMatchers("/books/*/borrow").hasAnyRole("USER", "ADMIN")
+                        // Web: xem sách công khai (GET), nhưng thêm/sửa/xóa/new/edit/delete chỉ ADMIN
+                        .requestMatchers(HttpMethod.GET, "/books", "/books/{id}").permitAll()
+                        .requestMatchers("/books/new", "/books/*/edit", "/books/*/delete").hasRole("ADMIN")
+                        .requestMatchers("/books/*/borrow").hasAnyRole("USER", "ADMIN")
 
-            	    // Web: category chỉ ADMIN toàn bộ
-            	    .requestMatchers("/categories/**").hasRole("ADMIN")
+                        // Web: category - allow public GET for listing and category pages, but restrict create/edit/delete to ADMIN
+                        .requestMatchers(HttpMethod.GET, "/categories", "/categories/{id}").permitAll()
+                        .requestMatchers("/categories/new", "/categories/*/edit", "/categories/*/delete").hasRole("ADMIN")
 
             	    // API giữ nguyên như cũ
             	    .requestMatchers(HttpMethod.GET, "/api/books/**", "/api/categories/**").permitAll()

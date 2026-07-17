@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Quản lý danh mục</title>
@@ -27,6 +28,7 @@
             <a class="btn btn-sm btn-warning" th:href="@{'/categories/' + ${cat.id} + '/edit'}">Sửa</a>
             <form style="display:inline" method="post" th:action="@{'/categories/' + ${cat.id} + '/delete'}"
                   onsubmit="return confirm('Xóa danh mục này?');">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
             </form>
         </td>

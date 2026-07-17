@@ -38,5 +38,16 @@ public class DataInitializer implements CommandLineRunner {
                     .role(adminRole)
                     .build());
         }
+        
+        if (!userRepository.existsByUsername("user")) {
+            userRepository.save(User.builder()
+                    .username("user")
+                    .email("user@lms.com")
+                    .password(passwordEncoder.encode("user123"))
+                    .fullName("Test User")
+                    .status(UserStatus.ACTIVE)
+                    .role(userRole)
+                    .build());
+        }
     }
 }

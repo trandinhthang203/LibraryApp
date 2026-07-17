@@ -2,6 +2,7 @@ package com.spring.demo.service;
 
 
 import com.spring.demo.dto.request.CategoryRequest;
+import com.spring.demo.entity.Book;
 import com.spring.demo.entity.Category;
 import com.spring.demo.exception.BusinessException;
 import com.spring.demo.exception.ResourceNotFoundException;
@@ -20,10 +21,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(CategoryRequest request) {
-        categoryRepository.findByNameIgnoreCase(request.getName()).ifPresent(c -> {
-            throw new BusinessException("Danh mục đã tồn tại");
-        });
-        Category category = Category.builder()
+    	Category category = categoryRepository.findByNameIgnoreCase(request.getName()).orElseThrow(() -> 
+            throw new BusinessException("Danh mục đã tồn tại")
+        );
+    	
+    	category = Category.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .build();

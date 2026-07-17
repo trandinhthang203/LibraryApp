@@ -49,6 +49,7 @@
             <!-- USER: mượn sách -->
             <form sec:authorize="hasRole('USER')" style="display:inline"
                   method="post" th:action="@{'/books/' + ${book.id} + '/borrow'}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="btn btn-sm btn-primary"
                         th:disabled="${book.stockQuantity <= 0}">Mượn</button>
             </form>
@@ -59,6 +60,7 @@
             <form sec:authorize="hasRole('ADMIN')" style="display:inline"
                   method="post" th:action="@{'/books/' + ${book.id} + '/delete'}"
                   onsubmit="return confirm('Xóa sách này?');">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
             </form>
         </td>

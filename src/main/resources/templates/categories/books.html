@@ -33,6 +33,12 @@
             <td>
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{'/books/' + ${book.id}}">Chi tiết</a>
                 <a sec:authorize="hasRole('ADMIN')" class="btn btn-sm btn-warning" th:href="@{'/books/' + ${book.id} + '/edit'}">Sửa</a>
+                <form sec:authorize="hasRole('USER')" style="display:inline"
+                      method="post" th:action="@{'/books/' + ${book.id} + '/borrow'}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-sm btn-primary"
+                            th:disabled="${book.stockQuantity <= 0}">Mượn</button>
+                </form>
             </td>
         </tr>
         </tbody>

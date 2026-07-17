@@ -4,6 +4,7 @@ import com.spring.demo.dto.request.BookRequest;
 import com.spring.demo.dto.request.BorrowRequest;
 import com.spring.demo.entity.User;
 import com.spring.demo.service.BookService;
+import com.spring.demo.repository.CategoryRepository;
 import com.spring.demo.service.BorrowRecordService;
 import com.spring.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class BookViewController {
     private final BookService bookService;
     private final BorrowRecordService borrowRecordService;
     private final UserService userService;
+    private final CategoryRepository categoryRepository;
 
     @GetMapping
     public String list(@RequestParam(required = false) String keyword,
@@ -44,6 +46,7 @@ public class BookViewController {
     public String newForm(Model model) {
         model.addAttribute("book", new BookRequest());
         model.addAttribute("bookId", null);
+        model.addAttribute("categories", categoryRepository.findAll());
         return "books/form";
     }
 
@@ -53,6 +56,7 @@ public class BookViewController {
             bookService.create(request);
         } catch (RuntimeException ex) {
             model.addAttribute("error", ex.getMessage());
+            model.addAttribute("categories", categoryRepository.findAll());
             return "books/form";
         }
         return "redirect:/books";
@@ -70,9 +74,14 @@ public class BookViewController {
         request.setPublicationDate(book.getPublicationDate());
         request.setSummary(book.getSummary());
         request.setStockQuantity(book.getStockQuantity());
+        // set selected category ids for the edit form
+        if (book.getCategories() != null) {
+            request.setCategoryIds(book.getCategories().stream().map(c -> c.getId()).collect(java.util.stream.Collectors.toSet()));
+        }
 
         model.addAttribute("book", request);
         model.addAttribute("bookId", id); // dùng riêng để form biết action nào
+        model.addAttribute("categories", categoryRepository.findAll());
         return "books/form";
     }
 
@@ -82,6 +91,8 @@ public class BookViewController {
             bookService.update(id, request);
         } catch (RuntimeException ex) {
             model.addAttribute("error", ex.getMessage());
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("bookId", id);
             return "books/form";
         }
         return "redirect:/books";
